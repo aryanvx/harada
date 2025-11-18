@@ -56,6 +56,7 @@ Create a `.env` file in the root directory with your Supabase credentials:
 ```env
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_ACCESS_TOKEN=your_supabase_personal_access_token
 ```
 
 You can find these values in your Supabase project settings under API.
