@@ -69,6 +69,7 @@ function App() {
     setIsGenerating(true);
     try {
       const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-harada-goal`;
+      console.log('Calling API:', apiUrl);
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -78,9 +79,15 @@ function App() {
         body: JSON.stringify({ goalText }),
       });
 
-      if (!response.ok) throw new Error('Failed to generate goal');
+      console.log('Response status:', response.status);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error response:', errorText);
+        throw new Error(`Failed to generate goal: ${response.status} ${errorText}`);
+      }
 
       const generatedData = await response.json();
+      console.log('Generated data:', generatedData);
 
       const { data: goal, error: goalError } = await supabase
         .from('goals')
