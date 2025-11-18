@@ -13,14 +13,14 @@ The Harada Method is a goal-setting and achievement framework that helps you sys
 - AI-powered goal breakdown into the Harada Method framework
 - Interactive 9x9 grid visualization showing your complete plan
 - Public/private goal sharing with unique shareable links
-- Social media integration (Twitter/X and LinkedIn)
+- Social media integration (X + LinkedIn)
 - Export your goal grid as a PNG image
 - Community inspiration gallery of public goals
 - Fully responsive design with modern aesthetics
 
 ## Tech Stack
 
-- **Frontend**: React 18 with TypeScript
+- **Frontend**: React 18 w/ TypeScript
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS
 - **Database**: Supabase (PostgreSQL)
