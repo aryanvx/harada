@@ -61,7 +61,7 @@ SUPABASE_ACCESS_TOKEN=your_supabase_personal_access_token
 
 You can find these values in your Supabase project settings under API.
 
-### 4. Database Setup
+### Database Setup
 
 The database schema includes three main tables:
 
@@ -71,7 +71,7 @@ The database schema includes three main tables:
 
 Migrations are located in `supabase/migrations/` and should be applied automatically if using Supabase CLI, or manually through the Supabase dashboard.
 
-### 5. Edge Functions
+### Edge Functions
 
 The app uses a Supabase Edge Function to generate goal breakdowns:
 
@@ -79,7 +79,7 @@ The app uses a Supabase Edge Function to generate goal breakdowns:
 
 Edge functions are deployed separately through the Supabase dashboard or CLI.
 
-## Development
+### 4. Development
 
 Start the development server:
 
