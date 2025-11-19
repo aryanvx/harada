@@ -8,13 +8,15 @@ This takes any big goal you have and turns it into a clear, structured 64-task p
 
 It’s a Japanese goal-setting system created by Olympic coach Takashi Harada. You start with one main goal, support it with eight pillars, and break each pillar into eight tasks. That’s your roadmap.
 
+Essentially just:
+
 ### 1 Central Goal
 
 ### 8 Pillars
 
-### 64 Tasks
+### 8 tasks per pillar
 
-Simple structure, serious clarity.
+For a total of **64 Tasks**.
 
 ## Features
 
