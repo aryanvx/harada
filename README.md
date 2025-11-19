@@ -79,7 +79,7 @@ Groq API key
 ### See it yourself
 
 1. Clone the repo
-```
+```sh
 git clone https://github.com/aryanvx/harada.git
 cd harada
 ```
