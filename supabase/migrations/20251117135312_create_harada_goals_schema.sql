@@ -1,8 +1,8 @@
 /*
-  # HaraDaily - Harada Method Goal Setting Database Schema
+  # Harada.ai
 
   ## Overview
-  This migration creates the complete database schema for the HaraDaily app,
+  This migration creates the complete database schema for the Harada.ai app,
   which helps users create and visualize goals using the Harada Method (8x8 grid).
 
   ## New Tables

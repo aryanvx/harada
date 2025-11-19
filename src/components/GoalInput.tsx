@@ -71,12 +71,6 @@ export default function GoalInput({ onGenerateGoal, isLoading }: GoalInputProps)
           <p className="text-sm text-stone-500 mb-3 font-light tracking-wide">
             Inspired by the legendary method used by Shohei Ohtani
           </p>
-          <a
-            href="#gallery"
-            className="text-stone-700 hover:text-stone-900 font-light text-sm transition-colors border-b border-stone-400 hover:border-stone-900"
-          >
-            View Example Grids
-          </a>
         </div>
       </div>
     </div>
