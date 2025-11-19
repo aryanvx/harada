@@ -45,7 +45,8 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const haradaGrid = generateHaradaGrid(goalText);
+    // Generate Harada grid using Groq AI
+    const haradaGrid = await generateHaradaGridWithAI(goalText);
 
     return new Response(JSON.stringify(haradaGrid), {
       headers: {
@@ -68,221 +69,119 @@ Deno.serve(async (req: Request) => {
   }
 });
 
-function generateHaradaGrid(goalText: string): HaradaGrid {
-  const isMarathonGoal = goalText.toLowerCase().includes('marathon') ||
-                         goalText.toLowerCase().includes('run a') ||
-                         goalText.toLowerCase().includes('running');
-
-  if (isMarathonGoal) {
-    return {
-      pillars: [
-        {
-          pillar_text: "Base Building",
-          position: 1,
-          tasks: [
-            { task_text: "Run 3x per week, 30-45 min easy pace", position: 1 },
-            { task_text: "Add 10% weekly mileage increase", position: 2 },
-            { task_text: "One long run per week (progressive)", position: 3 },
-            { task_text: "Complete 12-week base phase", position: 4 },
-            { task_text: "Track all runs in training log", position: 5 },
-            { task_text: "Build to 40+ miles per week", position: 6 },
-            { task_text: "Master conversational pace running", position: 7 },
-            { task_text: "Complete rest days without guilt", position: 8 }
-          ]
-        },
-        {
-          pillar_text: "Strength & Mobility",
-          position: 2,
-          tasks: [
-            { task_text: "Strength train 2x per week", position: 1 },
-            { task_text: "Focus on single-leg exercises", position: 2 },
-            { task_text: "Core work 3x per week", position: 3 },
-            { task_text: "Hip strengthening routine", position: 4 },
-            { task_text: "Foam roll after every run", position: 5 },
-            { task_text: "Dynamic stretching pre-run", position: 6 },
-            { task_text: "Yoga or mobility 1x per week", position: 7 },
-            { task_text: "Address imbalances early", position: 8 }
-          ]
-        },
-        {
-          pillar_text: "Speed Work",
-          position: 3,
-          tasks: [
-            { task_text: "Weekly tempo runs (8 weeks out)", position: 1 },
-            { task_text: "400m intervals at goal pace", position: 2 },
-            { task_text: "800m repeats for endurance", position: 3 },
-            { task_text: "Fartlek training on trails", position: 4 },
-            { task_text: "Track pace at marathon goal", position: 5 },
-            { task_text: "Hill repeats for power", position: 6 },
-            { task_text: "Progressive long runs", position: 7 },
-            { task_text: "Practice negative splits", position: 8 }
-          ]
-        },
-        {
-          pillar_text: "Nutrition & Fuel",
-          position: 4,
-          tasks: [
-            { task_text: "3 balanced meals daily", position: 1 },
-            { task_text: "Carb-load 3 days before race", position: 2 },
-            { task_text: "Test race-day breakfast", position: 3 },
-            { task_text: "Practice fueling on long runs", position: 4 },
-            { task_text: "Hydrate 80-100oz daily", position: 5 },
-            { task_text: "Find gel/chew that works", position: 6 },
-            { task_text: "Protein within 30min post-run", position: 7 },
-            { task_text: "Avoid new foods race week", position: 8 }
-          ]
-        },
-        {
-          pillar_text: "Recovery",
-          position: 5,
-          tasks: [
-            { task_text: "Sleep 8+ hours every night", position: 1 },
-            { task_text: "Ice bath after long runs", position: 2 },
-            { task_text: "Schedule rest days weekly", position: 3 },
-            { task_text: "Listen to body signals", position: 4 },
-            { task_text: "Get sports massage monthly", position: 5 },
-            { task_text: "Compression gear post-run", position: 6 },
-            { task_text: "Active recovery walks", position: 7 },
-            { task_text: "Taper 2-3 weeks before race", position: 8 }
-          ]
-        },
-        {
-          pillar_text: "Mental Prep",
-          position: 6,
-          tasks: [
-            { task_text: "Visualize race day success", position: 1 },
-            { task_text: "Practice positive self-talk", position: 2 },
-            { task_text: "Break race into 4 segments", position: 3 },
-            { task_text: "Prepare for tough miles 18-22", position: 4 },
-            { task_text: "Create race day mantras", position: 5 },
-            { task_text: "Study course elevation profile", position: 6 },
-            { task_text: "Plan for various weather scenarios", position: 7 },
-            { task_text: "Trust the training on race day", position: 8 }
-          ]
-        },
-        {
-          pillar_text: "Gear & Equipment",
-          position: 7,
-          tasks: [
-            { task_text: "Get fitted for proper shoes", position: 1 },
-            { task_text: "Replace shoes every 400 miles", position: 2 },
-            { task_text: "Test all race day clothing", position: 3 },
-            { task_text: "Anti-chafe strategy (Body Glide)", position: 4 },
-            { task_text: "GPS watch for pacing", position: 5 },
-            { task_text: "Hydration vest for long runs", position: 6 },
-            { task_text: "Nothing new on race day", position: 7 },
-            { task_text: "Pack race day bag checklist", position: 8 }
-          ]
-        },
-        {
-          pillar_text: "Race Strategy",
-          position: 8,
-          tasks: [
-            { task_text: "Set A, B, C time goals", position: 1 },
-            { task_text: "Start 15-30 seconds slower", position: 2 },
-            { task_text: "Even pace first 20 miles", position: 3 },
-            { task_text: "Fuel every 45 minutes", position: 4 },
-            { task_text: "Water at every aid station", position: 5 },
-            { task_text: "Bank energy for final 10K", position: 6 },
-            { task_text: "Know mile markers for pacing", position: 7 },
-            { task_text: "Run your own race, not others'", position: 8 }
-          ]
-        }
-      ]
-    };
+async function generateHaradaGridWithAI(goalText: string): Promise<HaradaGrid> {
+  const groqApiKey = Deno.env.get('GROQ_API_KEY');
+  
+  if (!groqApiKey) {
+    console.error('GROQ_API_KEY not configured');
+    throw new Error('AI service not configured');
   }
 
-  const pillarTemplates = [
-    { name: "Skills & Knowledge", tasks: [
-      "Research best practices",
-      "Take an online course",
-      "Read 3 relevant books",
-      "Find a mentor",
-      "Practice daily fundamentals",
-      "Join a community",
-      "Attend workshops",
-      "Document learnings"
-    ]},
-    { name: "Physical Health", tasks: [
-      "Exercise 4x per week",
-      "Get 8 hours of sleep",
-      "Eat balanced meals",
-      "Stay hydrated",
-      "Stretch daily",
-      "Schedule health check-ups",
-      "Reduce stress",
-      "Track energy levels"
-    ]},
-    { name: "Mental & Emotional", tasks: [
-      "Practice meditation",
-      "Journal daily progress",
-      "Visualize success",
-      "Maintain positive mindset",
-      "Manage setbacks",
-      "Celebrate small wins",
-      "Practice gratitude",
-      "Build resilience"
-    ]},
-    { name: "Time Management", tasks: [
-      "Create daily schedule",
-      "Set weekly goals",
-      "Prioritize tasks",
-      "Eliminate distractions",
-      "Time block activities",
-      "Review progress weekly",
-      "Adjust plans as needed",
-      "Maintain consistency"
-    ]},
-    { name: "Resources & Tools", tasks: [
-      "Identify necessary tools",
-      "Create budget plan",
-      "Acquire equipment",
-      "Set up workspace",
-      "Organize materials",
-      "Build support system",
-      "Find accountability partner",
-      "Track expenses"
-    ]},
-    { name: "Network & Support", tasks: [
-      "Connect with like-minded people",
-      "Share progress publicly",
-      "Seek feedback regularly",
-      "Help others with similar goals",
-      "Attend networking events",
-      "Build online presence",
-      "Join relevant groups",
-      "Collaborate on projects"
-    ]},
-    { name: "Strategy & Planning", tasks: [
-      "Break down into milestones",
-      "Set monthly objectives",
-      "Create action plans",
-      "Identify potential obstacles",
-      "Develop contingency plans",
-      "Track metrics",
-      "Measure progress",
-      "Adjust strategy"
-    ]},
-    { name: "Environment & Habits", tasks: [
-      "Design success environment",
-      "Build morning routine",
-      "Create evening rituals",
-      "Remove negative influences",
-      "Establish accountability",
-      "Track habits daily",
-      "Reward consistency",
-      "Maintain workspace"
-    ]}
-  ];
+  const systemPrompt = `You are an expert in the Harada Method, a Japanese goal-achievement framework that systematically breaks down ambitious goals into actionable steps.
 
-  return {
-    pillars: pillarTemplates.map((template, index) => ({
-      pillar_text: template.name,
-      position: index + 1,
-      tasks: template.tasks.map((task, taskIndex) => ({
-        task_text: task,
-        position: taskIndex + 1
-      }))
-    }))
-  };
+The Harada Method structure:
+- 1 Central Goal (provided by user)
+- 8 Strategic Pillars (key areas that support achieving the goal)
+- 64 Actionable Tasks (8 specific tasks per pillar)
+
+Your job is to analyze the user's goal and create a highly personalized, realistic breakdown.
+
+RULES:
+1. Create exactly 8 pillars that are directly relevant to THIS SPECIFIC goal
+2. Each pillar should represent a distinct strategic area needed to achieve the goal
+3. For each pillar, create exactly 8 actionable, specific tasks
+4. Tasks must be concrete actions, not vague advice (e.g., "Run 3x per week" not "Exercise more")
+5. Tasks should progress logically from foundational to advanced within each pillar
+6. Consider the goal's context, realistic timelines, and what actually works
+7. Make tasks measurable and trackable when possible
+8. Pillar names should be 2-4 words, clear and specific
+
+Respond ONLY with valid JSON matching this exact structure:
+{
+  "pillars": [
+    {
+      "pillar_text": "Pillar Name",
+      "tasks": [
+        "Specific actionable task 1",
+        "Specific actionable task 2",
+        "Specific actionable task 3",
+        "Specific actionable task 4",
+        "Specific actionable task 5",
+        "Specific actionable task 6",
+        "Specific actionable task 7",
+        "Specific actionable task 8"
+      ]
+    }
+  ]
+}
+
+Make the breakdown inspiring yet realistic. Focus on what will actually help someone achieve this specific goal.`;
+
+  const userPrompt = `Create a Harada Method breakdown for this goal: "${goalText}"
+
+Analyze this goal carefully. What are the 8 most important strategic pillars needed to achieve it? What are the specific, actionable tasks within each pillar?`;
+
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${groqApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile', // Fast, capable, and free!
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.8,
+        response_format: { type: "json_object" }
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Groq API error:', errorText);
+      throw new Error('AI generation failed');
+    }
+
+    const data = await response.json();
+    const content = data.choices[0].message.content;
+
+    // Parse the AI response
+    const aiResponse = JSON.parse(content);
+
+    // Validate and transform to our exact structure
+    if (!aiResponse.pillars || !Array.isArray(aiResponse.pillars)) {
+      throw new Error('Invalid AI response structure');
+    }
+
+    if (aiResponse.pillars.length !== 8) {
+      throw new Error(`Expected 8 pillars, got ${aiResponse.pillars.length}`);
+    }
+
+    // Transform to match our HaradaGrid interface
+    const haradaGrid: HaradaGrid = {
+      pillars: aiResponse.pillars.map((pillar: any, index: number) => {
+        if (!pillar.tasks || pillar.tasks.length !== 8) {
+          throw new Error(`Pillar "${pillar.pillar_text}" must have exactly 8 tasks`);
+        }
+
+        return {
+          pillar_text: pillar.pillar_text,
+          position: index + 1,
+          tasks: pillar.tasks.map((task: string, taskIndex: number) => ({
+            task_text: task,
+            position: taskIndex + 1
+          }))
+        };
+      })
+    };
+
+    return haradaGrid;
+
+  } catch (error) {
+    console.error('Error calling Groq:', error);
+    throw new Error('Failed to generate AI-powered goal breakdown');
+  }
 }
