@@ -98,23 +98,20 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 4. Set up the database
-```sh
+
 Tables:
 
-goals
-
-pillars
-
-tasks
+goals / pillars / tasks
 
 Push migrations:
-
+```sh
 supabase db push
 ```
 
 5. Get a Groq API key
 
-Sign up at console.groq.com → API Keys → Create Key
+Sign up at console.groq.com, go to the "API Keys" section, name it whatever you want, hit "Create Key", and then copy it.
+***Remember you can't see it again after you generate it, so write it down, and sybau you don't have photographic memory.***
 
 6. Add the key to Supabase
 ```sh
