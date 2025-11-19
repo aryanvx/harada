@@ -1,90 +1,191 @@
-# HaradaAI
+# Harada.ai
 
-## The Harada Method
+**AI-powered goal setting built on the Harada Method**
 
-The Harada Method is a goal-setting and achievement framework that helps you systematically break down large goals into manageable actions. Each goal is divided into:
+This takes any big goal you have and turns it into a clear, structured 64-task plan. It’s the Harada Method, but with AI doing the heavy lifting so you can focus on the work instead of the planning.
 
-- **1 Central Goal**: Your ambitious target
-- **8 Strategic Pillars**: Key areas that support your goal
-- **64 Actionable Tasks**: Specific steps within each pillar (8 tasks per pillar)
+## What is the Harada Method?
+
+It’s a Japanese goal-setting system created by Olympic coach Takashi Harada. You start with one main goal, support it with eight pillars, and break each pillar into eight tasks. That’s your roadmap.
+
+### 1 Central Goal
+
+### 8 Pillars
+
+### 64 Tasks
+
+Simple structure, serious clarity.
 
 ## Features
 
-- AI-powered goal breakdown into the Harada Method framework
-- Interactive 9x9 grid visualization showing your complete plan
-- Public/private goal sharing with unique shareable links
-- Social media integration (X + LinkedIn)
-- Export your goal grid as a PNG image
-- Community inspiration gallery of public goals
-- Fully responsive design with modern aesthetics
+AI Breakdown using Groq’s Llama 3.3 70B
+
+Clean 9×9 Grid to visualize your full plan
+
+Goal Sharing with public/private links
+
+Shareable to X + LinkedIn
+
+PNG Export of your full grid
+
+Inspiration Gallery to see what others are building
+
+Very Fast Generation thanks to Groq
+
+Responsive on both desktop and mobile
+
+## Example goals it handles well:
+
+Run a sub-4 marathon
+
+Launch a SaaS
+
+Learn Japanese
+
+Build a solid freelance business
+
+Write and publish a book
+
+Every one gets its own custom 64-task plan.
 
 ## Tech Stack
 
-- **Frontend**: React 18 w/ TypeScript
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS
-- **Database**: Supabase (PostgreSQL)
-- **Backend**: Supabase Edge Functions
-- **Icons**: Lucide React
-- **Export**: html2canvas
+React 18 + TypeScript + Vite
 
-## Prereqs
+Tailwind CSS
 
-- Node.js (v18 or higher recommended)
-- npm or yarn package manager
-- Supabase account (for database and edge functions)
+Supabase (Postgres)
 
-## Wanna fork it and see it yourself?
+Supabase Edge Functions (Deno)
 
-### 1. Clone the Repository
+Groq API
 
-```bash
-git clone <repository-url>
+Lucide React for icons
+
+html2canvas for export
+
+## Installation requirements
+
+Node 18+
+
+npm or yarn
+
+Supabase project
+
+Groq API key
+
+### See it yourself
+
+1. Clone the repo
+```
+git clone https://github.com/aryanvx/harada.git
 cd harada
 ```
 
-### 2. Install Dependencies
-
-```bash
+2. Install dependencies
+```
 npm install
 ```
 
-### 3. Environment Setup
+3. Add Supabase keys
 
-Create a `.env` file in the root directory with your Supabase credentials:
-
-```env
+Create .env.local:
+```
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_ACCESS_TOKEN=your_supabase_personal_access_token
 ```
 
-You can find these values in your Supabase project settings under API.
+4. Set up the database
+```
+Tables:
 
-### Database Setup
+goals
 
-The database schema includes three main tables:
+pillars
 
-- `goals`: Stores user goals with sharing capabilities
-- `pillars`: 8 strategic pillars for each goal
-- `tasks`: 8 tasks for each pillar (64 total per goal)
+tasks
 
-Migrations are located in `supabase/migrations/` and should be applied automatically if using Supabase CLI, or manually through the Supabase dashboard.
+Push migrations:
 
-### Edge Functions
+supabase db push
+```
 
-The app uses a Supabase Edge Function to generate goal breakdowns:
+5. Get a Groq API key
 
-- `generate-harada-goal`: Takes a goal text and returns structured pillars and tasks
+Sign up at console.groq.com → API Keys → Create Key
 
-Edge functions are deployed separately through the Supabase dashboard or CLI.
+6. Add the key to Supabase
+```
+supabase login
+supabase secrets set GROQ_API_KEY=gsk_your_actual_key_here
+```
 
-### 4. Development
+8. Deploy the edge function
+```
+supabase functions deploy generate-harada-goal
+```
 
-Start the development server:
-
-```bash
+10. Run the dev server
+```
 npm run dev
 ```
 
-Look at terminal to see which port the application launched using.
+Open the localhost link from the terminal.
+
+## Usage
+
+Enter your goal
+
+Generate your 64-task plan
+
+Look through each pillar and task
+
+Share it or download it
+
+Start working through the roadmap
+
+## Contributing
+
+If you want to add something, open a PR.
+
+Fork
+
+Make a branch
+
+Commit
+
+Push
+
+Open PR
+
+### Roadmap
+
+Auth
+
+Task progress tracking
+
+Mobile app
+
+Language support
+
+Goal templates
+
+Collaboration
+
+Analytics
+
+Chrome extension
+
+## Credits
+
+Takashi Harada for the original method
+
+Groq for the speed
+
+Supabase for the backend
+
+### Contact
+
+Aryan Vyahalkar — **@aryan.vyahalkar** on Instagram, **aryanvx** on GitHub, and **https://www.linkedin.com/in/aryanxvyahalkar/** for LinkedIn.
+
+Repo: https://github.com/aryanvx/harada
