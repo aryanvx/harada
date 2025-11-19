@@ -32,7 +32,7 @@ PNG Export of your full grid
 
 Inspiration Gallery to see what others are building
 
-Very Fast Generation thanks to Groq
+Light speed generation thanks to Groq
 
 Responsive on both desktop and mobile
 
@@ -46,9 +46,9 @@ Learn Japanese
 
 Build a solid freelance business
 
-Write and publish a book
+Write + publish a book
 
-Every one gets its own custom 64-task plan.
+Each goal gets its own custom 64-task plan.
 
 ## Tech Stack
 
