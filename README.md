@@ -85,20 +85,20 @@ cd harada
 ```
 
 2. Install dependencies
-```
+```sh
 npm install
 ```
 
 3. Add Supabase keys
 
 Create .env.local:
-```
+```sh
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 4. Set up the database
-```
+```sh
 Tables:
 
 goals
@@ -117,18 +117,18 @@ supabase db push
 Sign up at console.groq.com → API Keys → Create Key
 
 6. Add the key to Supabase
-```
+```sh
 supabase login
 supabase secrets set GROQ_API_KEY=gsk_your_actual_key_here
 ```
 
 8. Deploy the edge function
-```
+```sh
 supabase functions deploy generate-harada-goal
 ```
 
 10. Run the dev server
-```
+```sh
 npm run dev
 ```
 
