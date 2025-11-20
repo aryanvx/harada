@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import GoalInput from './components/GoalInput';
 import HaradaGrid from './components/HaradaGrid';
@@ -8,8 +8,10 @@ import { exportAsImage, getShareUrl, copyToClipboard } from './utils/export';
 
 function HomePage() {
   const navigate = useNavigate();
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const handleGenerateGoal = async (goalText: string) => {
+    setIsGenerating(true);
     try {
       const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-harada-goal`;
       console.log('Calling API:', apiUrl);
@@ -76,12 +78,14 @@ function HomePage() {
     } catch (error) {
       console.error('Error generating goal:', error);
       alert('Failed to generate goal. Please try again.');
+    } finally {
+      setIsGenerating(false);
     }
   };
 
   return (
     <>
-      <GoalInput onGenerateGoal={handleGenerateGoal} />
+      <GoalInput onGenerateGoal={handleGenerateGoal} isLoading={isGenerating} />
       <InspirationGallery />
     </>
   );
@@ -197,7 +201,7 @@ function GridPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-stone-100">
         <div className="animate-pulse text-xl text-slate-600">Loading grid...</div>
       </div>
     );
