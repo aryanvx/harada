@@ -1,72 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import GoalInput from './components/GoalInput';
 import HaradaGrid from './components/HaradaGrid';
 import InspirationGallery from './components/InspirationGallery';
 import { supabase, HaradaGrid as HaradaGridType } from './lib/supabase';
 import { exportAsImage, getShareUrl, copyToClipboard } from './utils/export';
 
-type ViewMode = 'input' | 'grid' | 'shared';
-
-function App() {
-  const [viewMode, setViewMode] = useState<ViewMode>('input');
-  const [currentGrid, setCurrentGrid] = useState<HaradaGridType | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const path = window.location.pathname;
-    const match = path.match(/^\/grid\/([^/]+)$/);
-
-    if (match) {
-      const shareToken = match[1];
-      loadSharedGrid(shareToken);
-    }
-  }, []);
-
-  const loadSharedGrid = async (shareToken: string) => {
-    try {
-      const { data: goal, error } = await supabase
-        .from('goals')
-        .select('*')
-        .eq('share_token', shareToken)
-        .maybeSingle();
-
-      if (error) throw error;
-      if (!goal) {
-        setViewMode('input');
-        return;
-      }
-
-      const { data: pillars } = await supabase
-        .from('pillars')
-        .select('*')
-        .eq('goal_id', goal.id)
-        .order('position');
-
-      if (pillars) {
-        const pillarsWithTasks = await Promise.all(
-          pillars.map(async (pillar) => {
-            const { data: tasks } = await supabase
-              .from('tasks')
-              .select('*')
-              .eq('pillar_id', pillar.id)
-              .order('position');
-
-            return { ...pillar, tasks: tasks || [] };
-          })
-        );
-
-        setCurrentGrid({ goal, pillars: pillarsWithTasks });
-        setViewMode('shared');
-      }
-    } catch (error) {
-      console.error('Error loading shared grid:', error);
-      setViewMode('input');
-    }
-  };
+function HomePage() {
+  const navigate = useNavigate();
 
   const handleGenerateGoal = async (goalText: string) => {
-    setIsGenerating(true);
     try {
       const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-harada-goal`;
       console.log('Calling API:', apiUrl);
@@ -128,14 +71,76 @@ function App() {
         })
       );
 
-      setCurrentGrid({ goal, pillars: pillarsWithTasks });
-      setViewMode('grid');
-      window.history.pushState({}, '', `/grid/${goal.share_token}`);
+      // Navigate to the grid page
+      navigate(`/grid/${goal.share_token}`);
     } catch (error) {
       console.error('Error generating goal:', error);
       alert('Failed to generate goal. Please try again.');
+    }
+  };
+
+  return (
+    <>
+      <GoalInput onGenerateGoal={handleGenerateGoal} />
+      <InspirationGallery />
+    </>
+  );
+}
+
+function GridPage() {
+  const { shareToken } = useParams<{ shareToken: string }>();
+  const navigate = useNavigate();
+  const [currentGrid, setCurrentGrid] = useState<HaradaGridType | null>(null);
+  const [loading, setLoading] = useState(true);
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (shareToken) {
+      loadSharedGrid(shareToken);
+    }
+  }, [shareToken]);
+
+  const loadSharedGrid = async (token: string) => {
+    try {
+      setLoading(true);
+      const { data: goal, error } = await supabase
+        .from('goals')
+        .select('*')
+        .eq('share_token', token)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!goal) {
+        navigate('/');
+        return;
+      }
+
+      const { data: pillars } = await supabase
+        .from('pillars')
+        .select('*')
+        .eq('goal_id', goal.id)
+        .order('position');
+
+      if (pillars) {
+        const pillarsWithTasks = await Promise.all(
+          pillars.map(async (pillar) => {
+            const { data: tasks } = await supabase
+              .from('tasks')
+              .select('*')
+              .eq('pillar_id', pillar.id)
+              .order('position');
+
+            return { ...pillar, tasks: tasks || [] };
+          })
+        );
+
+        setCurrentGrid({ goal, pillars: pillarsWithTasks });
+      }
+    } catch (error) {
+      console.error('Error loading shared grid:', error);
+      navigate('/');
     } finally {
-      setIsGenerating(false);
+      setLoading(false);
     }
   };
 
@@ -187,32 +192,40 @@ function App() {
   };
 
   const handleBack = () => {
-    setViewMode('input');
-    setCurrentGrid(null);
-    window.history.pushState({}, '', '/');
+    navigate('/');
   };
 
-  return (
-    <div ref={gridRef}>
-      {viewMode === 'input' && (
-        <>
-          <GoalInput onGenerateGoal={handleGenerateGoal} isLoading={isGenerating} />
-          <InspirationGallery />
-        </>
-      )}
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-xl text-slate-600">Loading grid...</div>
+      </div>
+    );
+  }
 
-      {(viewMode === 'grid' || viewMode === 'shared') && currentGrid && (
-        <div data-grid>
-          <HaradaGrid
-            gridData={currentGrid}
-            onBack={handleBack}
-            onExportImage={handleExportImage}
-            onTogglePublic={handleTogglePublic}
-            onCopyShareLink={handleCopyShareLink}
-          />
-        </div>
-      )}
+  if (!currentGrid) {
+    return null;
+  }
+
+  return (
+    <div ref={gridRef} data-grid>
+      <HaradaGrid
+        gridData={currentGrid}
+        onBack={handleBack}
+        onExportImage={handleExportImage}
+        onTogglePublic={handleTogglePublic}
+        onCopyShareLink={handleCopyShareLink}
+      />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/grid/:shareToken" element={<GridPage />} />
+    </Routes>
   );
 }
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase, HaradaGrid } from '../lib/supabase';
 import { ExternalLink, Sparkles } from 'lucide-react';
 
@@ -90,9 +91,9 @@ export default function InspirationGallery() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {grids.map((grid) => (
-            <a
+            <Link
               key={grid.goal.id}
-              href={`/grid/${grid.goal.share_token}`}
+              to={`/grid/${grid.goal.share_token}`}
               className="group block bg-slate-50 rounded-2xl p-6 border-2 border-slate-200 hover:border-blue-400 hover:shadow-xl transition-all"
             >
               <div className="flex items-start justify-between mb-4">
@@ -124,7 +125,7 @@ export default function InspirationGallery() {
                   View Grid →
                 </span>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
