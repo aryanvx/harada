@@ -119,7 +119,7 @@ Make the breakdown inspiring yet realistic. Focus on what will actually help som
 
   const userPrompt = `Create a Harada Method breakdown for this goal: "${goalText}"
 
-Analyze this goal carefully. What are the 8 most important strategic pillars needed to achieve it? What are the specific, actionable tasks within each pillar?`;
+Analyze this goal carefully. Make sure it is not offensive nor borderline offensive. If it is, render 'I cannot render this into the Harada Method. Please try again.' What are the 8 most important strategic pillars needed to achieve it? What are the specific, actionable tasks within each pillar?`;
 
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
