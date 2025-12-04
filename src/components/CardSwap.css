@@ -1,0 +1,64 @@
+.card-swap-container {
+	position: relative;
+	margin: 0 auto;
+	perspective: 1200px;
+	overflow: visible;
+}
+
+.card {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	border-radius: 16px;
+	border: 2px solid #e2e8f0;
+	background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+	transform-style: preserve-3d;
+	will-change: transform;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+	transition: box-shadow 0.3s ease;
+	overflow: hidden;
+}
+
+.card:hover {
+	box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+	border-color: #3b82f6;
+}
+
+/* Custom scrollbar for card content */
+.card ::-webkit-scrollbar {
+	width: 4px;
+}
+
+.card ::-webkit-scrollbar-track {
+	background: #f1f5f9;
+	border-radius: 2px;
+}
+
+.card ::-webkit-scrollbar-thumb {
+	background: #cbd5e1;
+	border-radius: 2px;
+}
+
+.card ::-webkit-scrollbar-thumb:hover {
+	background: #94a3b8;
+}
+
+@media (max-width: 1024px) {
+	.card-swap-container {
+		transform: scale(0.85);
+	}
+}
+
+@media (max-width: 768px) {
+	.card-swap-container {
+		transform: scale(0.7);
+	}
+}
+
+@media (max-width: 480px) {
+	.card-swap-container {
+		transform: scale(0.5);
+	}
+}
