@@ -211,6 +211,9 @@ export default function HaradaGrid({
             <p>原田メソッド</p>
           </div>
         </div>
+        <div className="mt-12 pt-8 border-t border-stone-300 text-center text-sm text-stone-500">
+          © 2025 Aryan Vyahalkar • <a href="https://github.com/aryanvx/harada" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline transition-colors">GitHub</a> • MIT License
+        </div>
       </div>
     </div>
   );
